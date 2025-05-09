@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<!-- 声明文档类型为HTML5 -->
+<html lang="zh-CN">
+<!-- 设置页面语言为中文 -->
+<head>
+    <!-- head部分包含页面的元信息 -->
+    <meta charset="UTF-8">
+    <!-- 设置字符编码为UTF-8，支持中文等多语言字符 -->
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 设置视口，使网页在移动设备上正确显示，initial-scale=1.0表示初始缩放比例为1 -->
+    
+    <meta name="description" content="我的个人作品集展示网站">
+    <!-- 设置网页描述，有助于SEO优化 -->
+    
+    <title>我的作品集 - 个人作品展示</title>
+    <!-- 设置网页标题 -->
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/features.css">
+    <!-- 链接外部CSS样式表 -->
+
+    <!-- 添加字体图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* 全局样式 */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --text-color: #333;
+            --bg-color: #fff;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        /* Hero 区域样式 */
+        .hero {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #f8f9fa;
+        }
+
+        .hero-slider {
+            height: 100%;
+            display: flex;
+            transition: transform var(--transition-speed) ease-in-out;
+        }
+
+        .hero-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+            background-color: #e9ecef;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: var(--text-color);
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--secondary-color);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all var(--transition-speed);
+            font-weight: bold;
+        }
+
+        .cta-button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 导航按钮 */
+        .slider-nav {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 10;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            border: 2px solid transparent;
+        }
+
+        .slider-dot:hover {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .slider-dot.active {
+            background: var(--secondary-color);
+            border-color: #fff;
+            transform: scale(1.2);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .cta-button {
+                padding: 0.8rem 1.6rem;
+            }
+        }
+
+        /* 项目展示区样式 */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .project-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-image {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+
+        .project-link {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .project-link:hover {
+            background: #fff;
+            color: var(--primary-color);
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-content h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .project-content p {
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: var(--secondary-color);
+            color: #fff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+        }
+
+        /* 技能树样式 */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .skill-category {
+            background: #fff;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .skill-category h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-category h3 i {
+            font-size: 1.2em;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .skill-item i {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            width: 30px;
+            text-align: center;
+        }
+
+        .skill-item span {
+            min-width: 100px;
+        }
+
+        .skill-bar {
+            flex: 1;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .skill-level {
+            height: 100%;
+            background: var(--secondary-color);
+            border-radius: 5px;
+            position: relative;
+            transition: width 1s ease-in-out;
+        }
+
+        .skill-percent {
+            position: absolute;
+            right: 0;
+            top: -25px;
+            font-size: 0.8rem;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            .skills-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .skill-item span {
+                min-width: 80px;
+            }
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-brand .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-brand .logo:hover {
+            color: var(--secondary-color);
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .nav-list {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        .nav-link i {
+            font-size: 1.2em;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--secondary-color);
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .theme-toggle:hover {
+            color: var(--secondary-color);
+        }
+
+        .lang-selector {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #fff;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-selector:hover {
+            border-color: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            .nav-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.95);
+                padding: 1rem;
+                transform: translateY(-100%);
+                transition: transform 0.3s ease-in-out;
+                visibility: hidden;
+            }
+
+            .nav-menu.active {
+                transform: translateY(0);
+                visibility: visible;
+            }
+
+            .nav-list {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-link {
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 深色模式切换按钮 -->
+    <button id="darkModeToggle" aria-label="切换深色模式">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- 语言选择器 -->
+    <select id="langSelector">
+        <option value="zh">中文</option>
+        <option value="en">English</option>
+    </select>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">我的作品集</a>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">首页</a></li>
+                <li><a href="#projects" class="nav-link">项目</a></li>
+                <li><a href="#skills" class="nav-link">技能</a></li>
+                <li><a href="#contact" class="nav-link">联系我</a></li>
+                <li class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <!-- 页面头部区域 -->
+        <h1>欢迎来到我的作品集</h1>
+    </header>
+
+    <!-- Hero 区域 -->
+    <section id="home" class="hero">
+        <div class="hero-content fade-in">
+            <h1>欢迎来到我的作品集</h1>
+            <p>这里展示了我的项目经验和专业技能</p>
+            <a href="#projects" class="cta-button">查看作品</a>
+        </div>
+    </section>
+
+    <main>
+        <!-- 页面主要内容区域 -->
+        <section id="about" class="section">
+            <h2 class="section-title">关于我</h2>
+            <div class="about-content">
+                <div class="profile-image">
+                    <img src="images/profile.jpg" alt="我的照片" loading="lazy">
+                </div>
+                <div class="profile-text">
+                    <p>你好！我是一名充满热情的前端开发者，专注于创建美观且用户友好的网站。</p>
+                    <p>我热爱学习新技术，并且善于将创意转化为现实。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="projects-section">
+            <div class="container">
+                <div class="section-title fade-in">
+                    <h2>项目展示</h2>
+                    <p>这里是我最近完成的一些项目</p>
+                </div>
+                <div class="projects-grid">
+                    <!-- 项目卡片1 -->
+                    <div class="project-card fade-in">
+                        <div class="project-image">
+                            <img src="images/project1.jpg" alt="项目1">
+                            <div class="project-overlay">
+                                <h3 class="project-title">项目名称1</h3>
+                                <p class="project-description">这是项目1的详细描述，介绍项目的主要功能和特点。</p>
+                                <a href="#" class="project-link">查看详情</a>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-tags">
+                                <span class="project-tag">HTML5</span>
+                                <span class="project-tag">CSS3</span>
+                                <span class="project-tag">JavaScript</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 项目卡片2 -->
+                    <div class="project-card fade-in">
+                        <div class="project-image">
+                            <img src="images/project2.jpg" alt="项目2">
+                            <div class="project-overlay">
+                                <h3 class="project-title">项目名称2</h3>
+                                <p class="project-description">这是项目2的详细描述，介绍项目的主要功能和特点。</p>
+                                <a href="#" class="project-link">查看详情</a>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-tags">
+                                <span class="project-tag">React</span>
+                                <span class="project-tag">Node.js</span>
+                                <span class="project-tag">MongoDB</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="skills-section">
+            <div class="container">
+                <div class="section-title fade-in">
+                    <h2>技能树</h2>
+                    <p>我掌握的技术栈和工具</p>
+                </div>
+                <div class="skills-grid">
+                    <!-- 前端开发 -->
+                    <div class="skill-category fade-in">
+                        <h3>前端开发</h3>
+                        <ul class="skill-list">
+                            <li class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">HTML5/CSS3</span>
+                                    <span class="skill-level">90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-percentage="90"></div>
+                                </div>
+                            </li>
+                            <li class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">JavaScript</span>
+                                    <span class="skill-level">85%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-percentage="85"></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 框架和库 -->
+                    <div class="skill-category fade-in">
+                        <h3>框架和库</h3>
+                        <ul class="skill-list">
+                            <li class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">React</span>
+                                    <span class="skill-level">80%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-percentage="80"></div>
+                                </div>
+                            </li>
+                            <li class="skill-item">
+                                <div class="skill-info">
+                                    <span class="skill-name">Vue.js</span>
+                                    <span class="skill-level">75%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-percentage="75"></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="blog" class="blog-container">
+            <h2 data-i18n="blog.title">博客文章</h2>
+            <div id="blogContainer">
+                <div id="blogList">
+                    <!-- 博客文章将通过JavaScript动态加载 -->
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section">
+            <div class="container">
+                <div class="section-title fade-in">
+                    <h2>联系我</h2>
+                    <p>如果您对我的项目感兴趣，欢迎联系我</p>
+                </div>
+                <div class="contact-grid fade-in">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <h3>邮箱</h3>
+                            <p><a href="mailto:example@email.com">example@email.com</a></p>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <h3>电话</h3>
+                            <p><a href="tel:+1234567890">123-456-7890</a></p>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fab fa-github"></i>
+                            <h3>GitHub</h3>
+                            <p><a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="project-experience" class="section">
+            <h2 class="section-title">项目经验</h2>
+            <div class="project-container">
+                <div class="project-item">
+                    <h3>个人作品集网站开发</h3>
+                    <p class="project-duration">2024年3月</p>
+                    <div class="project-description">
+                        <h4>项目概述：</h4>
+                        <p>独立开发的响应式个人作品集展示网站，采用现代化的前端技术栈，实现了多个交互功能和优化特性。</p>
+                        
+                        <h4>技术栈：</h4>
+                        <ul class="tech-stack">
+                            <li>HTML5 / CSS3</li>
+                            <li>JavaScript (ES6+)</li>
+                            <li>响应式设计</li>
+                            <li>Flex布局</li>
+                        </ul>
+                        
+                        <h4>主要功能：</h4>
+                        <ul class="feature-list">
+                            <li>响应式首页轮播图展示</li>
+                            <li>项目经验、技能树模块化展示</li>
+                            <li>智能联系方式处理（电话、邮件、社交媒体）</li>
+                            <li>微信二维码弹窗展示</li>
+                            <li>适配PC端和移动端的布局切换</li>
+                        </ul>
+                        
+                        <h4>技术亮点：</h4>
+                        <ul class="highlight-list">
+                            <li>使用Flex布局实现灵活的页面结构</li>
+                            <li>实现了移动端电话号码一键拨号功能</li>
+                            <li>添加了复制到剪贴板和提示功能</li>
+                            <li>优化了页面加载性能（懒加载、压缩资源）</li>
+                            <li>实现了平滑滚动和动画效果</li>
+                        </ul>
+                        
+                        <h4>项目收获：</h4>
+                        <ul class="learning-list">
+                            <li>掌握了响应式网页设计的核心概念和实践方法</li>
+                            <li>深入理解了Flex布局的应用场景和技巧</li>
+                            <li>提升了JavaScript交互功能的开发能力</li>
+                            <li>学会了考虑用户体验和设备兼容性</li>
+                            <li>掌握了前端性能优化的基本方法</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <!-- 页面底部区域 -->
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="#" target="_blank"><i class="fab fa-weixin"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-weibo"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+            <p>&copy; 2024 我的作品集. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/features.js"></script>
+    <!-- 链接外部JavaScript文件 -->
+
+    <script>
+        // 轮播图逻辑
+        const slider = document.querySelector('.hero-slider');
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        let currentSlide = 0;
+        const slideCount = slides.length;
+
+        // 自动轮播
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % slideCount;
+            updateSlider();
+        }, 5000);
+
+        // 点击导航点切换
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                updateSlider();
+            });
+        });
+
+        // 更新轮播图状态
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        // 为每个slide添加渐变背景
+        slides.forEach((slide, index) => {
+            const colors = [
+                'linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%)',
+                'linear-gradient(120deg, #f6d365 0%, #fda085 100%)',
+                'linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%)'
+            ];
+            slide.style.background = colors[index];
+        });
+
+        // 导航栏交互逻辑
+        document.addEventListener('DOMContentLoaded', () => {
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            // 切换菜单
+            navToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+
+            // 点击导航链接时关闭菜单
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                });
+            });
+
+            // 滚动时更新活动链接
+            window.addEventListener('scroll', () => {
+                let current = '';
+                const sections = document.querySelectorAll('section');
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (scrollY >= (sectionTop - sectionHeight / 3)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').slice(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
