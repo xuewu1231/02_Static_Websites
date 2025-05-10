@@ -16,11 +16,12 @@
     <title>我的作品集 - 个人作品展示</title>
     <!-- 设置网页标题 -->
     
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/features.css">
+    <!-- 修改CSS路径，添加 ./ 确保在GitHub Pages上正确加载 -->
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/features.css">
     <!-- 链接外部CSS样式表 -->
 
-    <!-- 添加字体图标库 -->
+    <!-- 使用CDN加载字体图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
@@ -751,9 +752,9 @@
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
-    <script src="js/features.js"></script>
-    <!-- 链接外部JavaScript文件 -->
+    <!-- 在body标签结束前添加JavaScript引用 -->
+    <script src="./js/main.js"></script>
+    <script src="./js/features.js"></script>
 
     <script>
         // 轮播图逻辑
